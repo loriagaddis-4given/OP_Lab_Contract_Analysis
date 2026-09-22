@@ -1,0 +1,82 @@
+﻿CPT,description,fee
+80048,Basic Metabolic Panel,10.58
+80053,Comprehensive Metabolic Panel,13.20
+80051,Electrolyte Panel,8.76
+80061,Lipid Panel,16.74
+80069,Renal Function Panel,10.85
+80076,Hepatic Function Panel,10.21
+82040,Albumin,6.19
+82043,"Urine Microalbumin, Quantitative",7.23
+82150,Amylase,8.10
+82248,"Bilirubin, Direct",6.28
+82270,"Fecal Occult Blood, Guaiac",5.48
+82306,"Vitamin D, 25-Hydroxy",37.00
+82310,"Calcium, Total",6.45
+82465,"Cholesterol, Total",5.44
+82550,"Creatine Kinase, Total",8.14
+82565,"Creatinine, Blood",6.40
+82607,Vitamin B12,18.85
+82728,Ferritin,17.04
+82746,Folate,18.38
+82947,"Glucose, Quantitative",4.91
+82962,"Glucose, Point of Care",4.10
+83036,Hemoglobin A1c,12.14
+83540,Iron,8.09
+83550,Iron Binding Capacity,10.93
+83615,Lactate Dehydrogenase,7.55
+83690,Lipase,8.61
+83735,Magnesium,8.38
+83880,B-Type Natriuretic Peptide,49.08
+83970,"Parathyroid Hormone, Intact",51.60
+84075,Alkaline Phosphatase,6.48
+84132,Potassium,5.95
+84153,"Prostate-Specific Antigen, Total",22.99
+84155,"Protein, Total",4.59
+84439,"Thyroxine, Free",11.28
+84443,Thyroid-Stimulating Hormone,21.00
+84460,Alanine Aminotransferase,6.63
+84484,"Troponin, Quantitative",15.59
+84520,Urea Nitrogen,4.94
+84550,Uric Acid,5.65
+84702,"hCG, Quantitative",18.81
+84703,"hCG, Qualitative",9.40
+80162,Digoxin Level,16.60
+80202,Vancomycin Level,16.93
+85025,Complete Blood Count with Differential,9.71
+85045,Reticulocyte Count,4.99
+85379,"D-Dimer, Quantitative",12.73
+85384,Fibrinogen Activity,12.15
+85610,Prothrombin Time,5.36
+85652,Erythrocyte Sedimentation Rate,3.38
+85730,Partial Thromboplastin Time,7.51
+86850,Red Blood Cell Antibody Screen,12.21
+86900,ABO Blood Typing,3.74
+86901,Rh(D) Blood Typing,3.74
+86038,Antinuclear Antibody Screen,15.11
+86140,C-Reactive Protein,6.48
+86200,Cyclic Citrullinated Peptide Antibody,16.19
+86308,Heterophile Antibody Screen,6.48
+86431,Rheumatoid Factor,7.09
+86704,"Hepatitis B Core Antibody, Total",15.06
+86706,Hepatitis B Surface Antibody,13.43
+86780,Syphilis Antibody,16.55
+86803,Hepatitis C Antibody,17.84
+87340,Hepatitis B Surface Antigen,12.91
+87389,HIV-1/HIV-2 Antigen and Antibody,30.10
+87040,Blood Culture,12.90
+87070,"Bacterial Culture, Other Source",10.78
+87077,Bacterial Isolate Identification,10.10
+87186,"Antimicrobial Susceptibility, MIC",10.81
+87205,Gram Stain,5.34
+87324,Clostridioides difficile Toxin Assay,14.98
+87804,Influenza A/B Antigen,20.69
+87880,Group A Streptococcus Antigen,20.66
+87426,SARS-CoV-2 Antigen,44.16
+87635,SARS-CoV-2 Molecular Test,64.14
+87637,"Respiratory Virus Panel, SARS-CoV-2/Flu/RSV",178.29
+81001,Urinalysis with Microscopy,3.96
+81003,Urinalysis without Microscopy,2.81
+89055,Fecal Leukocyte Examination,5.34
+88142,"Cervical Cytology, Automated",25.33
+88305,"Surgical Pathology, Level IV",152.50
+80307,Presumptive Drug Screen,77.68

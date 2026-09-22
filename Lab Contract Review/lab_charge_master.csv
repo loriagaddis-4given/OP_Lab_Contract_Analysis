@@ -1,0 +1,82 @@
+﻿chargeNum,description,revCode,CPT,price
+LAB100001,Basic Metabolic Panel,0301,80048,168.00
+LAB100002,Comprehensive Metabolic Panel,0301,80053,214.00
+LAB100003,Electrolyte Panel,0301,80051,142.00
+LAB100004,Lipid Panel,0301,80061,186.00
+LAB100005,Renal Function Panel,0301,80069,192.00
+LAB100006,Hepatic Function Panel,0301,80076,179.00
+LAB100007,Albumin,0301,82040,62.00
+LAB100008,"Urine Microalbumin, Quantitative",0301,82043,96.00
+LAB100009,Amylase,0301,82150,104.00
+LAB100010,"Bilirubin, Direct",0301,82248,58.00
+LAB100011,"Fecal Occult Blood, Guaiac",0301,82270,67.00
+LAB100012,"Vitamin D, 25-Hydroxy",0301,82306,231.00
+LAB100013,"Calcium, Total",0301,82310,54.00
+LAB100014,"Cholesterol, Total",0301,82465,73.00
+LAB100015,"Creatine Kinase, Total",0301,82550,92.00
+LAB100016,"Creatinine, Blood",0301,82565,55.00
+LAB100017,Vitamin B12,0301,82607,151.00
+LAB100018,Ferritin,0301,82728,134.00
+LAB100019,Folate,0301,82746,137.00
+LAB100020,"Glucose, Quantitative",0301,82947,49.00
+LAB100021,"Glucose, Point of Care",0301,82962,42.00
+LAB100022,Hemoglobin A1c,0301,83036,106.00
+LAB100023,Iron,0301,83540,79.00
+LAB100024,Iron Binding Capacity,0301,83550,83.00
+LAB100025,Lactate Dehydrogenase,0301,83615,82.00
+LAB100026,Lipase,0301,83690,119.00
+LAB100027,Magnesium,0301,83735,77.00
+LAB100028,B-Type Natriuretic Peptide,0301,83880,319.00
+LAB100029,"Parathyroid Hormone, Intact",0301,83970,246.00
+LAB100030,Alkaline Phosphatase,0301,84075,61.00
+LAB100031,Potassium,0301,84132,51.00
+LAB100032,"Prostate-Specific Antigen, Total",0301,84153,142.00
+LAB100033,"Protein, Total",0301,84155,57.00
+LAB100034,"Thyroxine, Free",0301,84439,121.00
+LAB100035,Thyroid-Stimulating Hormone,0301,84443,128.00
+LAB100036,Alanine Aminotransferase,0301,84460,59.00
+LAB100037,"Troponin, Quantitative",0301,84484,187.00
+LAB100038,Urea Nitrogen,0301,84520,52.00
+LAB100039,Uric Acid,0301,84550,68.00
+LAB100040,"hCG, Quantitative",0301,84702,137.00
+LAB100041,"hCG, Qualitative",0301,84703,91.00
+LAB100042,Digoxin Level,0301,80162,168.00
+LAB100043,Vancomycin Level,0301,80202,176.00
+LAB100044,Complete Blood Count with Differential,0305,85025,118.00
+LAB100045,Reticulocyte Count,0305,85045,97.00
+LAB100046,"D-Dimer, Quantitative",0305,85379,191.00
+LAB100047,Fibrinogen Activity,0305,85384,126.00
+LAB100048,Prothrombin Time,0305,85610,73.00
+LAB100049,Erythrocyte Sedimentation Rate,0305,85652,71.00
+LAB100050,Partial Thromboplastin Time,0305,85730,82.00
+LAB100051,Red Blood Cell Antibody Screen,0302,86850,146.00
+LAB100052,ABO Blood Typing,0305,86900,88.00
+LAB100053,Rh(D) Blood Typing,0305,86901,84.00
+LAB100054,Antinuclear Antibody Screen,0302,86038,174.00
+LAB100055,C-Reactive Protein,0302,86140,93.00
+LAB100056,Cyclic Citrullinated Peptide Antibody,0302,86200,223.00
+LAB100057,Heterophile Antibody Screen,0302,86308,86.00
+LAB100058,Rheumatoid Factor,0302,86431,108.00
+LAB100059,"Hepatitis B Core Antibody, Total",0302,86704,154.00
+LAB100060,Hepatitis B Surface Antibody,0302,86706,149.00
+LAB100061,Syphilis Antibody,0302,86780,132.00
+LAB100062,Hepatitis C Antibody,0302,86803,176.00
+LAB100063,Hepatitis B Surface Antigen,0302,87340,161.00
+LAB100064,HIV-1/HIV-2 Antigen and Antibody,0302,87389,219.00
+LAB100065,Blood Culture,0306,87040,184.00
+LAB100066,"Bacterial Culture, Other Source",0306,87070,139.00
+LAB100067,Bacterial Isolate Identification,0306,87077,128.00
+LAB100068,"Antimicrobial Susceptibility, MIC",0306,87186,167.00
+LAB100069,Gram Stain,0306,87205,81.00
+LAB100070,Clostridioides difficile Toxin Assay,0306,87324,196.00
+LAB100071,Influenza A/B Antigen,0306,87804,146.00
+LAB100072,Group A Streptococcus Antigen,0306,87880,112.00
+LAB100073,SARS-CoV-2 Antigen,0306,87426,137.00
+LAB100074,SARS-CoV-2 Molecular Test,0309,87635,247.00
+LAB100075,"Respiratory Virus Panel, SARS-CoV-2/Flu/RSV",0309,87637,438.00
+LAB100076,Urinalysis with Microscopy,0307,81001,76.00
+LAB100077,Urinalysis without Microscopy,0307,81003,51.00
+LAB100078,Fecal Leukocyte Examination,0309,89055,91.00
+LAB100079,"Cervical Cytology, Automated",0311,88142,152.00
+LAB100080,"Surgical Pathology, Level IV",0312,88305,327.00
+LAB100081,Presumptive Drug Screen,0309,80307,258.00
