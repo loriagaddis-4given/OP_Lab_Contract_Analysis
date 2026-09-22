@@ -512,6 +512,8 @@ The following query creates the account-level analysis dataset by combining char
 
 ```python
 duckdb.sql("""
+CREATE OR REPLACE TEMP VIEW account_level_analysis AS
+
 SELECT
    v.acctNum AS "Account #",
    c.chargeNum AS "Charge #",
@@ -531,40 +533,48 @@ JOIN 'Lab Contract Review/patient_encounters.csv' as v
    ON c.acctNum = v.acctNum
 JOIN 'Lab Contract Review/lab_fee_schedule.csv' as f
    ON m.CPT = f.CPT
-ORDER BY m.description
-LIMIT 20
+""")
+```
+
+
+```python
+duckdb.sql("""
+SELECT *
+FROM account_level_analysis
+ORDER BY "Account #", "Charge #"
+LIMIT 20;
 """)
 ```
 
 
 
 
-    ┌────────────┬───────────┬──────────────────────────┬───────┬───────────────┬──────────────────────────────┬───────────────────────────────────┬─────────────────────────────────────────────┬─────────────────────────┬───────────────────────────────────────┬─────────────────────────────────────────────────┐
-    │ Account #  │ Charge #  │    Charge Description    │  Qty  │  Charge Amt   │ Current Contract Allowed Amt │ Proposed Fee Schedule Allowed Amt │ Allowed Amt Difference (Current - Proposed) │ Current Contractual Amt │ Proposed Fee Schedule Contractual Amt │ Contractual Amt Difference (Current - Proposed) │
-    │  varchar   │  varchar  │         varchar          │ int64 │ decimal(10,2) │        decimal(10,2)         │           decimal(10,2)           │                decimal(11,2)                │      decimal(10,2)      │             decimal(10,2)             │                  decimal(11,2)                  │
-    ├────────────┼───────────┼──────────────────────────┼───────┼───────────────┼──────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────┼─────────────────────────┼───────────────────────────────────────┼─────────────────────────────────────────────────┤
-    │ ACCT000834 │ LAB100052 │ ABO Blood Typing         │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
-    │ ACCT000780 │ LAB100052 │ ABO Blood Typing         │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
-    │ ACCT001075 │ LAB100052 │ ABO Blood Typing         │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
-    │ ACCT000017 │ LAB100052 │ ABO Blood Typing         │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
-    │ ACCT000977 │ LAB100052 │ ABO Blood Typing         │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
-    │ ACCT000327 │ LAB100052 │ ABO Blood Typing         │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
-    │ ACCT000572 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000924 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000247 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000453 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000144 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000162 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT001146 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000751 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000374 │ LAB100036 │ Alanine Aminotransferase │     1 │         59.00 │                        47.20 │                              6.63 │                                       40.57 │                   11.80 │                                 52.37 │                                          -40.57 │
-    │ ACCT000123 │ LAB100007 │ Albumin                  │     1 │         62.00 │                        49.60 │                              6.19 │                                       43.41 │                   12.40 │                                 55.81 │                                          -43.41 │
-    │ ACCT000890 │ LAB100007 │ Albumin                  │     1 │         62.00 │                        49.60 │                              6.19 │                                       43.41 │                   12.40 │                                 55.81 │                                          -43.41 │
-    │ ACCT000320 │ LAB100007 │ Albumin                  │     1 │         62.00 │                        49.60 │                              6.19 │                                       43.41 │                   12.40 │                                 55.81 │                                          -43.41 │
-    │ ACCT000958 │ LAB100007 │ Albumin                  │     1 │         62.00 │                        49.60 │                              6.19 │                                       43.41 │                   12.40 │                                 55.81 │                                          -43.41 │
-    │ ACCT000196 │ LAB100007 │ Albumin                  │     1 │         62.00 │                        49.60 │                              6.19 │                                       43.41 │                   12.40 │                                 55.81 │                                          -43.41 │
-    └────────────┴───────────┴──────────────────────────┴───────┴───────────────┴──────────────────────────────┴───────────────────────────────────┴─────────────────────────────────────────────┴─────────────────────────┴───────────────────────────────────────┴─────────────────────────────────────────────────┘
-      20 rows                                                                                                                                                                                                                                                                                             11 columns
+    ┌────────────┬───────────┬────────────────────────────────────────┬───────┬───────────────┬──────────────────────────────┬───────────────────────────────────┬─────────────────────────────────────────────┬─────────────────────────┬───────────────────────────────────────┬─────────────────────────────────────────────────┐
+    │ Account #  │ Charge #  │           Charge Description           │  Qty  │  Charge Amt   │ Current Contract Allowed Amt │ Proposed Fee Schedule Allowed Amt │ Allowed Amt Difference (Current - Proposed) │ Current Contractual Amt │ Proposed Fee Schedule Contractual Amt │ Contractual Amt Difference (Current - Proposed) │
+    │  varchar   │  varchar  │                varchar                 │ int64 │ decimal(10,2) │        decimal(10,2)         │           decimal(10,2)           │                decimal(11,2)                │      decimal(10,2)      │             decimal(10,2)             │                  decimal(11,2)                  │
+    ├────────────┼───────────┼────────────────────────────────────────┼───────┼───────────────┼──────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────┼─────────────────────────┼───────────────────────────────────────┼─────────────────────────────────────────────────┤
+    │ ACCT000001 │ LAB100081 │ Presumptive Drug Screen                │     1 │        258.00 │                       206.40 │                             77.68 │                                      128.72 │                   51.60 │                                180.32 │                                         -128.72 │
+    │ ACCT000002 │ LAB100077 │ Urinalysis without Microscopy          │     1 │         51.00 │                        40.80 │                              2.81 │                                       37.99 │                   10.20 │                                 48.19 │                                          -37.99 │
+    │ ACCT000003 │ LAB100077 │ Urinalysis without Microscopy          │     1 │         51.00 │                        40.80 │                              2.81 │                                       37.99 │                   10.20 │                                 48.19 │                                          -37.99 │
+    │ ACCT000004 │ LAB100048 │ Prothrombin Time                       │     1 │         73.00 │                        58.40 │                              5.36 │                                       53.04 │                   14.60 │                                 67.64 │                                          -53.04 │
+    │ ACCT000005 │ LAB100021 │ Glucose, Point of Care                 │     1 │         42.00 │                        33.60 │                              4.10 │                                       29.50 │                    8.40 │                                 37.90 │                                          -29.50 │
+    │ ACCT000006 │ LAB100018 │ Ferritin                               │     1 │        134.00 │                       107.20 │                             17.04 │                                       90.16 │                   26.80 │                                116.96 │                                          -90.16 │
+    │ ACCT000007 │ LAB100021 │ Glucose, Point of Care                 │     1 │         42.00 │                        33.60 │                              4.10 │                                       29.50 │                    8.40 │                                 37.90 │                                          -29.50 │
+    │ ACCT000008 │ LAB100077 │ Urinalysis without Microscopy          │     1 │         51.00 │                        40.80 │                              2.81 │                                       37.99 │                   10.20 │                                 48.19 │                                          -37.99 │
+    │ ACCT000009 │ LAB100001 │ Basic Metabolic Panel                  │     1 │        168.00 │                       134.40 │                             10.58 │                                      123.82 │                   33.60 │                                157.42 │                                         -123.82 │
+    │ ACCT000009 │ LAB100031 │ Potassium                              │     1 │         51.00 │                        40.80 │                              5.95 │                                       34.85 │                   10.20 │                                 45.05 │                                          -34.85 │
+    │ ACCT000010 │ LAB100048 │ Prothrombin Time                       │     1 │         73.00 │                        58.40 │                              5.36 │                                       53.04 │                   14.60 │                                 67.64 │                                          -53.04 │
+    │ ACCT000011 │ LAB100002 │ Comprehensive Metabolic Panel          │     1 │        214.00 │                       171.20 │                             13.20 │                                      158.00 │                   42.80 │                                200.80 │                                         -158.00 │
+    │ ACCT000011 │ LAB100044 │ Complete Blood Count with Differential │     1 │        118.00 │                        94.40 │                              9.71 │                                       84.69 │                   23.60 │                                108.29 │                                          -84.69 │
+    │ ACCT000012 │ LAB100010 │ Bilirubin, Direct                      │     1 │         58.00 │                        46.40 │                              6.28 │                                       40.12 │                   11.60 │                                 51.72 │                                          -40.12 │
+    │ ACCT000013 │ LAB100044 │ Complete Blood Count with Differential │     1 │        118.00 │                        94.40 │                              9.71 │                                       84.69 │                   23.60 │                                108.29 │                                          -84.69 │
+    │ ACCT000013 │ LAB100047 │ Fibrinogen Activity                    │     1 │        126.00 │                       100.80 │                             12.15 │                                       88.65 │                   25.20 │                                113.85 │                                          -88.65 │
+    │ ACCT000014 │ LAB100044 │ Complete Blood Count with Differential │     1 │        118.00 │                        94.40 │                              9.71 │                                       84.69 │                   23.60 │                                108.29 │                                          -84.69 │
+    │ ACCT000015 │ LAB100024 │ Iron Binding Capacity                  │     1 │         83.00 │                        66.40 │                             10.93 │                                       55.47 │                   16.60 │                                 72.07 │                                          -55.47 │
+    │ ACCT000016 │ LAB100001 │ Basic Metabolic Panel                  │     1 │        168.00 │                       134.40 │                             10.58 │                                      123.82 │                   33.60 │                                157.42 │                                         -123.82 │
+    │ ACCT000017 │ LAB100052 │ ABO Blood Typing                       │     1 │         88.00 │                        70.40 │                              3.74 │                                       66.66 │                   17.60 │                                 84.26 │                                          -66.66 │
+    └────────────┴───────────┴────────────────────────────────────────┴───────┴───────────────┴──────────────────────────────┴───────────────────────────────────┴─────────────────────────────────────────────┴─────────────────────────┴───────────────────────────────────────┴─────────────────────────────────────────────────┘
+      20 rows                                                                                                                                                                                                                                                                                                           11 columns
 
 
 
@@ -744,3 +754,39 @@ FROM totals;
 - The model does not include contractual rules such as modifiers, multiple-procedure reductions, bundled services, coverage limitations, or payer-specific exceptions unless those rules are explicitly represented in the fee schedule.
 - The analysis assumes that historical charge volume and test utilization would remain unchanged under the proposed fee schedule.
 - Results apply only to the outpatient laboratory services represented in the synthetic dataset and should not be generalized to other departments, patient populations, or reimbursement arrangements.
+
+## Tableau Data Export
+
+The validated account-level analysis dataset is exported for use as the Tableau data source. The complete dataset is exported, while the notebook displays only a limited preview.
+
+
+```python
+duckdb.sql("""
+COPY (
+    SELECT *
+    FROM account_level_analysis
+)
+TO 'Lab Contract Review/lab_contract_analysis_detail.csv'
+(FORMAT CSV, HEADER);
+""")
+```
+
+
+```python
+duckdb.sql("""
+SELECT COUNT(*) AS exported_rows
+FROM 'Lab Contract Review/lab_contract_analysis_detail.csv';
+""")
+```
+
+
+
+
+    ┌───────────────┐
+    │ exported_rows │
+    │     int64     │
+    ├───────────────┤
+    │          1450 │
+    └───────────────┘
+
+
