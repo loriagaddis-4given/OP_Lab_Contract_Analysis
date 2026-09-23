@@ -21,7 +21,7 @@ import duckdb
 
 ## Source Files and Data Limitations
 
-   The project uses synthetic CSV files stored in the 'data/raw' directory. The data was created solely to demonstrate data validation, relational data modeling, SQL analysis, and data visualization techniques. It does not represent real patients, encounters, or healthcare activity.
+   The project uses synthetic CSV files stored in the 'Lab Contract Review' directory. The data was created solely to demonstrate data validation, relational data modeling, SQL analysis, and data visualization techniques. It does not represent real patients, encounters, or healthcare activity.
 
 ## Source Data Inventory
 
@@ -225,6 +225,8 @@ FROM 'Lab Contract Review/lab_charge_master.csv';
 
 
 
+The following query identifies any charge numbers that appear more than once. Because 'chargeNum' is the primary key for the charge master, each value should occur only once. A successful validation returns no rows.
+
 
 ```python
 duckdb.sql("""
@@ -414,7 +416,7 @@ The following query checks required fields for missing values.
 ```python
 duckdb.sql("""
 SELECT
-    COUNT(*) FILTER (WHERE CPT IS NULL) AS "Missing Account Numbers"
+    COUNT(*) FILTER (WHERE CPT IS NULL) AS "Missing CPT Codes"
 FROM 'Lab Contract Review/lab_fee_schedule.csv';
 """)
 ```
@@ -422,38 +424,43 @@ FROM 'Lab Contract Review/lab_fee_schedule.csv';
 
 
 
-    ┌─────────────────────────┐
-    │ Missing Account Numbers │
-    │          int64          │
-    ├─────────────────────────┤
-    │                       0 │
-    └─────────────────────────┘
+    ┌───────────────────┐
+    │ Missing CPT Codes │
+    │       int64       │
+    ├───────────────────┤
+    │                 0 │
+    └───────────────────┘
 
 
+
+The following query identifies any CPT codes that appear more than once. Because `CPT` is the primary key for the lab fee schedule, each value should occur only once. A successful validation returns no rows.
 
 
 ```python
 duckdb.sql("""
 SELECT
-   COUNT (*) AS row_count,
-   COUNT (DISTINCT chargeNum) as distinct_key_count
-FROM 'Lab Contract Review/lab_charge_master.csv';
+    CPT,
+    COUNT(*) AS occurrences
+FROM 'Lab Contract Review/lab_fee_schedule.csv'
+GROUP BY CPT
+HAVING COUNT(*) > 1;
 """)
 ```
 
 
 
 
-    ┌───────────┬────────────────────┐
-    │ row_count │ distinct_key_count │
-    │   int64   │       int64        │
-    ├───────────┼────────────────────┤
-    │        81 │                 81 │
-    └───────────┴────────────────────┘
+    ┌───────┬─────────────┐
+    │  CPT  │ occurrences │
+    │ int64 │    int64    │
+    └───────┴─────────────┘
+            0 rows       
 
 
 
-The following query joins the four validated source tables to create the analysis dataset. patient_charges provides the transaction-level records, while patient_encounters, lab_charge_master, and lab_fee_schedule supply the related encounter, charge-description, and proposed reimbursement information. The selected columns avoid duplicating the foreign-key fields used in the joins.
+### Cross-File Validation
+
+The following query joins the four validated source tables and displays all available columns to verify the structure of the combined records. The `patient_charges` table supplies the transaction-level activity, while `patient_encounters`, `lab_charge_master`, and `lab_fee_schedule` add the related encounter details, charge descriptions, current prices, and proposed reimbursement amounts. This full-column result is used to validate the joins before selecting the fields needed for the account-level analysis dataset.
 
 
 ```python
@@ -507,6 +514,8 @@ JOIN 'Lab Contract Review/lab_fee_schedule.csv' as f
 
 The join query returned the number of rows expected and did not unexpectedly multiply or omit charge records.
 
+### Account-Level Analysis Dataset
+
 The following query creates the account-level analysis dataset by combining charge activity with the current contract and proposed fee schedule amounts. A limited preview is displayed for verification; subsequent queries summarize the results by charge code and across the full population.
 
 
@@ -524,7 +533,7 @@ SELECT
    CAST((f.fee) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Allowed Amt",
    (CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2))) -  (CAST((f.fee) AS DECIMAL(10, 2))) AS "Allowed Amt Difference (Current - Proposed)",
    CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) AS "Current Contractual Amt",
-   CAST(((c.qty * m.price) - (f.fee)) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Contractual Amt",
+   CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Contractual Amt",
    (CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (f.fee)) AS DECIMAL(10, 2))) AS "Contractual Amt Difference (Current - Proposed)" 
 FROM 'Lab Contract Review/patient_charges.csv' as c
 JOIN 'Lab Contract Review/lab_charge_master.csv' as m
@@ -535,6 +544,8 @@ JOIN 'Lab Contract Review/lab_fee_schedule.csv' as f
    ON m.CPT = f.CPT
 """)
 ```
+
+This query displays a sample of the dataset we just created.
 
 
 ```python
@@ -597,7 +608,7 @@ SELECT
    (SUM(CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2))) - SUM(CAST((c.qty * f.fee) AS DECIMAL(10, 2)))) AS "Total Allowed Amt Difference (Current - Proposed)",
    SUM(CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2))) AS "Total Current Contractual Amt",
    SUM(CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2))) AS "Total Proposed Fee Schedule Contractual Amt",
-   SUM((CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (f.fee)) AS DECIMAL(10, 2)))) AS "Total Contractual Amt Difference (Current - Proposed)" 
+   SUM((CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2)))) AS "Total Contractual Amt Difference (Current - Proposed)" 
 FROM 'Lab Contract Review/patient_charges.csv' as c
 JOIN 'Lab Contract Review/lab_charge_master.csv' as m
    ON c.chargeNum = m.chargeNum
@@ -617,16 +628,16 @@ ORDER BY "Total Allowed Amt Difference (Current - Proposed)" DESC;
     │ Charge #  │             Charge Description              │ Net Quantity │ Total Charges │ Total Current Contract Allowed Amt │ Total Proposed Fee Schedule Allowed Amt │ Total Allowed Amt Difference (Current - Proposed) │ Total Current Contractual Amt │ Total Proposed Fee Schedule Contractual Amt │ Total Contractual Amt Difference (Current - Proposed) │
     │  varchar  │                   varchar                   │    int128    │ decimal(38,2) │           decimal(38,2)            │              decimal(38,2)              │                   decimal(38,2)                   │         decimal(38,2)         │                decimal(38,2)                │                     decimal(38,2)                     │
     ├───────────┼─────────────────────────────────────────────┼──────────────┼───────────────┼────────────────────────────────────┼─────────────────────────────────────────┼───────────────────────────────────────────────────┼───────────────────────────────┼─────────────────────────────────────────────┼───────────────────────────────────────────────────────┤
-    │ LAB100002 │ Comprehensive Metabolic Panel               │           90 │      19260.00 │                           15408.00 │                                 1188.00 │                                          14220.00 │                       3852.00 │                                    18072.00 │                                             -14114.40 │
-    │ LAB100001 │ Basic Metabolic Panel                       │           89 │      14952.00 │                           11961.60 │                                  941.62 │                                          11019.98 │                       2990.40 │                                    14010.38 │                                             -10956.50 │
+    │ LAB100002 │ Comprehensive Metabolic Panel               │           90 │      19260.00 │                           15408.00 │                                 1188.00 │                                          14220.00 │                       3852.00 │                                    18072.00 │                                             -14220.00 │
+    │ LAB100001 │ Basic Metabolic Panel                       │           89 │      14952.00 │                           11961.60 │                                  941.62 │                                          11019.98 │                       2990.40 │                                    14010.38 │                                             -11019.98 │
     │ LAB100044 │ Complete Blood Count with Differential      │          109 │      12862.00 │                           10289.60 │                                 1058.39 │                                           9231.21 │                       2572.40 │                                    11803.61 │                                              -9231.21 │
-    │ LAB100004 │ Lipid Panel                                 │           47 │       8742.00 │                            6993.60 │                                  786.78 │                                           6206.82 │                       1748.40 │                                     7955.22 │                                              -6173.34 │
-    │ LAB100037 │ Troponin, Quantitative                      │           43 │       8041.00 │                            6432.80 │                                  670.37 │                                           5762.43 │                       1608.20 │                                     7370.63 │                                              -5700.07 │
+    │ LAB100004 │ Lipid Panel                                 │           47 │       8742.00 │                            6993.60 │                                  786.78 │                                           6206.82 │                       1748.40 │                                     7955.22 │                                              -6206.82 │
+    │ LAB100037 │ Troponin, Quantitative                      │           43 │       8041.00 │                            6432.80 │                                  670.37 │                                           5762.43 │                       1608.20 │                                     7370.63 │                                              -5762.43 │
     │ LAB100028 │ B-Type Natriuretic Peptide                  │           24 │       7656.00 │                            6124.80 │                                 1177.92 │                                           4946.88 │                       1531.20 │                                     6478.08 │                                              -4946.88 │
     │ LAB100075 │ Respiratory Virus Panel, SARS-CoV-2/Flu/RSV │           28 │      12264.00 │                            9811.20 │                                 4992.12 │                                           4819.08 │                       2452.80 │                                     7271.88 │                                              -4819.08 │
     │ LAB100035 │ Thyroid-Stimulating Hormone                 │           52 │       6656.00 │                            5324.80 │                                 1092.00 │                                           4232.80 │                       1331.20 │                                     5564.00 │                                              -4232.80 │
-    │ LAB100065 │ Blood Culture                               │           26 │       4784.00 │                            3827.20 │                                  335.40 │                                           3491.80 │                        956.80 │                                     4448.60 │                                              -3466.00 │
-    │ LAB100022 │ Hemoglobin A1c                              │           47 │       4982.00 │                            3985.60 │                                  570.58 │                                           3415.02 │                        996.40 │                                     4411.42 │                                              -3390.74 │
+    │ LAB100065 │ Blood Culture                               │           26 │       4784.00 │                            3827.20 │                                  335.40 │                                           3491.80 │                        956.80 │                                     4448.60 │                                              -3491.80 │
+    │ LAB100022 │ Hemoglobin A1c                              │           47 │       4982.00 │                            3985.60 │                                  570.58 │                                           3415.02 │                        996.40 │                                     4411.42 │                                              -3415.02 │
     │     ·     │     ·                                       │            · │           ·   │                                ·   │                                     ·   │                                               ·   │                           ·   │                                         ·   │                                                  ·    │
     │     ·     │     ·                                       │            · │           ·   │                                ·   │                                     ·   │                                               ·   │                           ·   │                                         ·   │                                                  ·    │
     │     ·     │     ·                                       │            · │           ·   │                                ·   │                                     ·   │                                               ·   │                           ·   │                                         ·   │                                                  ·    │
@@ -735,7 +746,7 @@ FROM totals;
 
 ### Findings
 
-- Source validation confirmed that the four datasets contained the expected record counts, unique row identifiers, required values, and valid relationships between tables.
+- Source validation confirmed the expected record counts, unique row identifiers, complete primary keys, and valid relationships between tables.
 - Cross-file validation found no unexpected unmatched foreign keys or row multiplication during the joins.
 - Charge corrections were accounted for using net quantity so that reversed charges did not inflate charge volume or modeled allowances.
 - Under the current contract, the analyzed laboratory charges produced a total allowed amount of **\$158,093.60**.
