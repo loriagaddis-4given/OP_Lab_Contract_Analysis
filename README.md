@@ -49,5 +49,6 @@ Modeled allowed amounts do not necessarily represent collected revenue. The anal
 
 ## Tableau Dashboard
 [View the interactive Tableau dashboard](https://public.tableau.com/views/OPLabContractImpact/OPLabContractAnalysis)
+
 [![Outpatient Laboratory Contract Impact Analysis dashboard](Images/outpatient-lab-contract-dashboard.png)](https://public.tableau.com/views/OPLabContractImpact/OPLabContractAnalysis)
 
