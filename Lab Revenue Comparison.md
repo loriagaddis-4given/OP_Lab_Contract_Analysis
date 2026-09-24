@@ -530,11 +530,11 @@ SELECT
    c.qty AS "Qty",
    CAST((c.qty * m.price) AS DECIMAL(10, 2)) AS "Charge Amt",
    CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2)) AS "Current Contract Allowed Amt",
-   CAST((f.fee) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Allowed Amt",
-   (CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2))) -  (CAST((f.fee) AS DECIMAL(10, 2))) AS "Allowed Amt Difference (Current - Proposed)",
+   CAST((c.qty * f.fee) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Allowed Amt",
+   (CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2))) -  (CAST((c.qty * f.fee) AS DECIMAL(10, 2))) AS "Allowed Amt Difference (Current - Proposed)",
    CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) AS "Current Contractual Amt",
    CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Contractual Amt",
-   (CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (f.fee)) AS DECIMAL(10, 2))) AS "Contractual Amt Difference (Current - Proposed)" 
+   (CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2))) AS "Contractual Amt Difference (Current - Proposed)" 
 FROM 'Lab Contract Review/patient_charges.csv' as c
 JOIN 'Lab Contract Review/lab_charge_master.csv' as m
    ON c.chargeNum = m.chargeNum
@@ -800,4 +800,18 @@ FROM 'Lab Contract Review/lab_contract_analysis_detail.csv';
     │          1450 │
     └───────────────┘
 
+
+
+
+```python
+duckdb.sql("""
+SELECT charge 
+```
+
+
+      Cell In[24], line 1
+        duckdb.sql("""
+                   ^
+    _IncompleteInputError: incomplete input
+    
 

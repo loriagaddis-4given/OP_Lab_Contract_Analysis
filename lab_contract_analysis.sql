@@ -86,7 +86,8 @@ SELECT
 FROM 'Lab Contract Review/patient_charges.csv';
 
 
--- Identifies the specific row numbers that violate the uniqueness rule.
+-- Identifies repeated account, charge, and service-date combinations
+-- that retain a positive net quantity after reversals.
 -- A successful validation returns no rows.
 SELECT
     acctNum,
@@ -137,19 +138,19 @@ FROM 'Lab Contract Review/lab_fee_schedule.csv';
 
 -- Counts records with a missing CPT, the table's primary key.
 -- A successful validation returns zero.
-duckdb.sql("""
 SELECT
-   COUNT (*) AS row_count,
-   COUNT (DISTINCT CPT) as distinct_key_count
-FROM 'Lab Contract Review/lab_fee_schedule.csv';
-""")
+    CPT,
+    COUNT(*) AS occurrences
+FROM 'Lab Contract Review/lab_fee_schedule.csv'
+GROUP BY CPT
+HAVING COUNT(*) > 1;
 
 
 -- =========================================================
 -- Cross-File Validation
 -- =========================================================
 
--- Joins all for source tables and displays the complete combined
+-- Joins all four source tables and displays the complete combined
 -- record structure to validate the table relationships.
 SELECT
    *
@@ -159,7 +160,7 @@ JOIN 'Lab Contract Review/lab_charge_master.csv' as m
 JOIN 'Lab Contract Review/patient_encounters.csv' as v
    ON c.acctNum = v.acctNum
 JOIN 'Lab Contract Review/lab_fee_schedule.csv' as f
-   ON m.CPT = f.CPT
+   ON m.CPT = f.CPT;
 
 -- =========================================================
 -- Account-Level Analysis Dataset
@@ -176,11 +177,11 @@ SELECT
    c.qty AS "Qty",
    CAST((c.qty * m.price) AS DECIMAL(10, 2)) AS "Charge Amt",
    CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2)) AS "Current Contract Allowed Amt",
-   CAST((f.fee) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Allowed Amt",
-   (CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2))) -  (CAST((f.fee) AS DECIMAL(10, 2))) AS "Allowed Amt Difference (Current - Proposed)",
+   CAST((c.qty * f.fee) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Allowed Amt",
+   (CAST(((c.qty * m.price) * .8) AS DECIMAL(10, 2))) -  (CAST((c.qty * f.fee) AS DECIMAL(10, 2))) AS "Allowed Amt Difference (Current - Proposed)",
    CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) AS "Current Contractual Amt",
    CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2)) AS "Proposed Fee Schedule Contractual Amt",
-   (CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (f.fee)) AS DECIMAL(10, 2))) AS "Contractual Amt Difference (Current - Proposed)" 
+   (CAST(((c.qty * m.price) - ((c.qty * m.price) * .8)) AS DECIMAL(10,2)) - CAST(((c.qty * m.price) - (c.qty * f.fee)) AS DECIMAL(10, 2))) AS "Contractual Amt Difference (Current - Proposed)" 
 FROM 'Lab Contract Review/patient_charges.csv' as c
 JOIN 'Lab Contract Review/lab_charge_master.csv' as m
    ON c.chargeNum = m.chargeNum
