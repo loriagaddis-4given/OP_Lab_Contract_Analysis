@@ -14,6 +14,7 @@ How would replacing the current outpatient laboratory contract with the proposed
 - Jupyter Notebook
 - Markdown
 - Synthetic CSV datasets
+- Tableau
 
 ## Methodology
 
@@ -45,3 +46,6 @@ Modeled allowed amounts do not necessarily represent collected revenue. The anal
 - [Read the complete Markdown analysis](<Lab Revenue Comparison.md>)
 - [View the Jupyter notebook](<Lab Revenue Comparison.ipynb>)
 - [View the synthetic source data](<Lab Contract Review>)
+
+## Tableau Dashboard
+- [View the interactive Tableau dashboard](https://public.tableau.com/views/OPLabContractImpact/OPLabContractAnalysis)
