@@ -48,7 +48,8 @@ Modeled allowed amounts do not necessarily represent collected revenue. The anal
 - [View the synthetic source data](<Lab Contract Review>)
 
 ## Tableau Dashboard
+
 [View the interactive Tableau dashboard](https://public.tableau.com/views/OPLabContractImpact/OPLabContractAnalysis)
 
-[![Outpatient Laboratory Contract Impact Analysis dashboard](Images/outpatient-lab-contract-dashboard.png)](https://public.tableau.com/views/OPLabContractImpact/OPLabContractAnalysis)
+[![Outpatient Laboratory Contract Impact Analysis dashboard](Images/Lab Contract Review Dashboard.png)](https://public.tableau.com/views/OPLabContractImpact/OPLabContractAnalysis)
 
