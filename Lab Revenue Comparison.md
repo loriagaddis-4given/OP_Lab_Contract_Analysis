@@ -4,7 +4,10 @@
 To protect confidential patient information and contract terms, this portfolio recreation uses fully synthetic visit, laboratory charge-master, and patient-charge data. The proposed payer fee schedule was also simulated using CMS Clinical Laboratory Fee Schedule rates increased by 25%, or 125% of the CMS rate. I performed the analysis with DuckDB SQL in a Jupyter Notebook.
 This project is based on a real-world analysis I previously completed, but all data, reimbursement rates, and results presented here are synthetic and illustrative.
 
-**Tools:** Jupyter Notebook, DuckDB SQL, Python (DuckDB package);  <br>**Data Source:** Synthetic data created for portfolio demonstration; no protected health information or actual contract materials included.
+
+```python
+**Tools:** Jupyter Notebook, DuckDB SQL, Python (DuckDB package), Tableau;  <br>**Data Source:** Synthetic data created for portfolio demonstration; no protected health information or actual contract materials included.
+```
 
 ## Project Objectives
 
